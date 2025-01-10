@@ -17,21 +17,23 @@ const parseArguments = (args: string[]): bmiValues => {
     }
 }
 
-const calculateBmi = (lb: number, inch: number) => {
+export const calculateBmi = (lb: number, inch: number): String => {
     const bmi = (lb * 703) / (inch * inch);
-    if (bmi < 18.5) console.log("underweight");
-    else if (bmi < 25) console.log("normal range");
-    else if (bmi < 30) console.log("overweight");
-    else console.log("obese");
+    if (bmi < 18.5) return "underweight";
+    else if (bmi < 25) return "normal range";
+    else if (bmi < 30) return "overweight";
+    else return "obese";
 }
 
-try {
-    const { value1, value2 } = parseArguments(process.argv);
-    calculateBmi(value1, value2);
-} catch (error: unknown) {
-    let errorMessage = 'Something bad happened.';
-    if (error instanceof Error) {
-        errorMessage += ' Error: ' + error.message;
+if (require.main === module){
+    try {
+        const { value1, value2 } = parseArguments(process.argv);
+        console.log(calculateBmi(value1, value2));
+    } catch (error: unknown) {
+        let errorMessage = 'Something bad happened.';
+        if (error instanceof Error) {
+            errorMessage += ' Error: ' + error.message;
+        }
+        console.log(errorMessage)
     }
-    console.log(errorMessage)
 }
