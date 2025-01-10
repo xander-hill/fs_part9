@@ -11,19 +11,19 @@ const parseArguments = (args: string[]): bmiValues => {
         return {
             value1: Number(args[2]),
             value2: Number(args[3])
-        }
+        };
     } else {
         throw new Error('Provided values not numbers');
     }
-}
+};
 
-export const calculateBmi = (lb: number, inch: number): String => {
+export const calculateBmi = (lb: number, inch: number): string => {
     const bmi = (lb * 703) / (inch * inch);
     if (bmi < 18.5) return "underweight";
     else if (bmi < 25) return "normal range";
     else if (bmi < 30) return "overweight";
     else return "obese";
-}
+};
 
 if (require.main === module){
     try {
@@ -34,6 +34,6 @@ if (require.main === module){
         if (error instanceof Error) {
             errorMessage += ' Error: ' + error.message;
         }
-        console.log(errorMessage)
+        console.log(errorMessage);
     }
 }
