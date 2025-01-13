@@ -61,6 +61,6 @@ export enum Gender {
   Other = 'other'
 }
 
-export type Entry = BaseEntry | HealthCheckEntry | OccupationsHealthcareEntry | HospitalEntry;
+export type Entry = HealthCheckEntry | OccupationsHealthcareEntry | HospitalEntry;
 
 export type PatientFormValues = Omit<Patient, "id" | "entries">;
