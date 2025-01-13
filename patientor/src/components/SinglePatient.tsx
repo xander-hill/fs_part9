@@ -22,6 +22,17 @@ const SinglePatient = ({ patient } : Props) => {
             }</h2>
             <p>ssh: {patient.ssn}</p>
             <p>occupation: {patient.occupation}</p>
+            <h4>Entries:</h4>
+            {patient.entries.map(entry => (
+                <div>
+                    {entry.date}: {entry.description}
+                    <ul>
+                        {entry.diagnosisCodes?.map(code => (
+                            <li key={code}>{code}</li>
+                        ))}
+                    </ul>
+                </div>
+            ))}
         </div>
     );
 };
