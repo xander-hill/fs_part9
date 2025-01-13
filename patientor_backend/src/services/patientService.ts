@@ -13,7 +13,7 @@ const getNonSensitivePatients = ():NonSensitivePatient[] => {
         name,
         dateOfBirth,
         gender,
-        occupation
+        occupation,
     }));
 };
 

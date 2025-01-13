@@ -30,7 +30,7 @@ const newPatientParser = (req: Request, _res: Response, next: Function) => {
 };
 
 router.get('/', (_req, res) => {
-    res.send(patientService.getNonSensitivePatients());
+    res.send(patientService.getPatients());
 });
 
 router.post('/', newPatientParser, (req: Request<unknown, unknown, NewPatient>, res: Response<Patient>) => {
