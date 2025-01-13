@@ -1,13 +1,17 @@
-import { Patient } from "../types";
+import { Patient, Diagnosis } from "../types";
 import MaleIcon from '@mui/icons-material/Male';
 import FemaleIcon from '@mui/icons-material/Female';
 import TransgenderIcon from '@mui/icons-material/Transgender';
 
 interface Props {
-    patient: Patient | undefined | null
+    patient: Patient | undefined | null;
+    diagnoses: Diagnosis[];
 }
 
-const SinglePatient = ({ patient } : Props) => {
+
+const SinglePatient = ({ patient, diagnoses } : Props) => {
+    const diagnosisCode = (code: string): string | undefined => diagnoses.find(d => d.code === code)?.name;
+    
     if (!patient) {
         return null;
     }
@@ -28,7 +32,7 @@ const SinglePatient = ({ patient } : Props) => {
                     {entry.date}: {entry.description}
                     <ul>
                         {entry.diagnosisCodes?.map(code => (
-                            <li key={code}>{code}</li>
+                            <li key={code}>{code}: {diagnosisCode(code)}</li>
                         ))}
                     </ul>
                 </div>

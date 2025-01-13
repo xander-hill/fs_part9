@@ -6,9 +6,12 @@ import { Button, Divider, Container, Typography } from '@mui/material';
 import { apiBaseUrl } from "./constants";
 import { Patient } from "./types";
 
+import diagnosisService from "./services/diagnoses";
 import SinglePatient from "./components/SinglePatient";
 import patientService from "./services/patients";
 import PatientListPage from "./components/PatientListPage";
+
+const diagnoses = await diagnosisService.getAll();
 
 const App = () => {
   const [patients, setPatients] = useState<Patient[]>([]);
@@ -39,7 +42,7 @@ const App = () => {
         </Button>
         <Divider hidden />
         <Routes>
-          <Route path="/patients/:id" element={<SinglePatient patient={patient} />} />
+          <Route path="/patients/:id" element={<SinglePatient patient={patient} diagnoses={diagnoses} />} />
           <Route path="/" element={<PatientListPage patients={patients} setPatients={setPatients} />} />
         </Routes>
       </Container>
