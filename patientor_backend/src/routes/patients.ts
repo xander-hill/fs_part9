@@ -3,6 +3,7 @@ import patientService from '../services/patientService';
 import { Patient, NewPatient } from '../types';
 import { newPatientSchema } from '../utils';
 import { z } from 'zod';
+//import patients from '../../data/patientEntries';
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
 const errorMiddleware = (error: unknown, _req: Request, res: Response, next: Function) => { 
@@ -35,6 +36,15 @@ router.get('/', (_req, res) => {
 router.post('/', newPatientParser, (req: Request<unknown, unknown, NewPatient>, res: Response<Patient>) => {
     const addedPatient = patientService.addPatient(req.body);
     res.json(addedPatient);
+});
+
+router.get('/:id', (req: Request, res: Response<Patient>) => {
+  const patient = patientService.findById(String(req.params.id));
+  if (patient) {
+    res.send(patient);
+  } else {
+    res.sendStatus(400);
+  }
 });
 
 router.use(errorMiddleware);

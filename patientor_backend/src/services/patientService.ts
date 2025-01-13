@@ -21,6 +21,7 @@ const addPatient = ( patient: NewPatient ): Patient => {
     const newPatient = {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
         id: uuid(),
+        entries: [],
         ...patient
     };
 
@@ -28,8 +29,14 @@ const addPatient = ( patient: NewPatient ): Patient => {
     return newPatient;
 };
 
+const findById = (id: string): Patient | undefined => {
+    const patient = patients.find(p => p.id === id);
+    return patient;
+};
+
 export default {
     getPatients,
     getNonSensitivePatients,
-    addPatient
+    addPatient,
+    findById
 };
