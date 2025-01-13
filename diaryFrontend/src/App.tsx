@@ -49,12 +49,23 @@ const App = () => {
       <h2>Add new entry</h2>
       {}
       <form onSubmit={diaryCreate}>
-        Date: <input value={date} onChange={(event) => setDate(event.target.value)}/>
+        Date: <input type="date" value={date} onChange={(event) => setDate(event.target.value)}/>
         <br />
-        Weather: <input value={weather} onChange={(event) => setWeather(event.target.value)}/>
-        <br />
-        Visibility: <input value={visibility} onChange={(event) => setVisibility(event.target.value)}/>
-        <br />
+          <div>
+          Weather: 
+            <input type="radio" name="weather" value="sunny" onChange={(event) => setWeather(event.target.value)}/> sunny
+            <input type="radio" name="weather" value="rainy" onChange={(event) => setWeather(event.target.value)}/> rainy
+            <input type="radio" name="weather" value="cloudy" onChange={(event) => setWeather(event.target.value)}/> cloudy
+            <input type="radio" name="weather" value="stormy" onChange={(event) => setWeather(event.target.value)}/> stormy
+            <input type="radio" name="weather" value="windy" onChange={(event) => setWeather(event.target.value)}/> windy
+          </div>
+          <div>
+          Visibility: 
+            <input type="radio" name="visibility" value="great" onChange={(event) => setVisibility(event.target.value)}/> great
+            <input type="radio" name="visibility" value="good" onChange={(event) => setVisibility(event.target.value)}/> good
+            <input type="radio" name="visibility" value="ok" onChange={(event) => setVisibility(event.target.value)}/> ok
+            <input type="radio" name="visibility" value="poor" onChange={(event) => setVisibility(event.target.value)}/> poor
+          </div>
         Comment: <input value={comment} onChange={(event) => setComment(event.target.value)}/>
         <br/>
         <button type='submit'>add</button>
