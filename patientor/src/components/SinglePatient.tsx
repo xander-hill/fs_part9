@@ -1,8 +1,10 @@
-import { Patient, Diagnosis } from "../types";
+import { Patient, Diagnosis, Entry } from "../types";
 import MaleIcon from '@mui/icons-material/Male';
 import FemaleIcon from '@mui/icons-material/Female';
 import TransgenderIcon from '@mui/icons-material/Transgender';
 import SingleEntry from "./SingleEntry";
+import EntryForm from "./EntryForm";
+import { useEffect, useState } from "react";
 
 interface Props {
     patient: Patient | undefined | null;
@@ -11,12 +13,12 @@ interface Props {
 
 
 const SinglePatient = ({ patient, diagnoses } : Props) => {
+    const [patientState, setPatientState] = useState<Patient | null | undefined>(patient);
+
     
     if (!patient) {
         return null;
     }
-
-
 
     return (
         <div>
@@ -28,6 +30,7 @@ const SinglePatient = ({ patient, diagnoses } : Props) => {
             }</h2>
             <p>ssh: {patient.ssn}</p>
             <p>occupation: {patient.occupation}</p>
+            <EntryForm patient={patient}/>
             <h4>Entries:</h4>
             {patient.entries.map(entry => (
                 <SingleEntry entry={entry} diagnoses={diagnoses} />
