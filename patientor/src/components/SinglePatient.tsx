@@ -27,7 +27,7 @@ const SinglePatient = ({ patient, diagnoses } : Props) => {
             }</h2>
             <p>ssh: {patient.ssn}</p>
             <p>occupation: {patient.occupation}</p>
-            <EntryForm patient={patient}/>
+            <EntryForm patient={patient} diagnoses={diagnoses}/>
             <h4>Entries:</h4>
             {patient.entries.map(entry => (
                 <SingleEntry entry={entry} diagnoses={diagnoses} />

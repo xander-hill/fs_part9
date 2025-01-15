@@ -1,19 +1,22 @@
 import { EntryWithoutId, Diagnosis, Patient } from "../types"
 import React, { Dispatch, SetStateAction, useState } from "react";
 import patientService from '../services/patients';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import OutlinedInput from '@mui/material/OutlinedInput';
 
 interface FormProps {
     //addEntry: (values: EntryWithoutId) => void;
-    //diagnoses: Diagnosis[];
+    diagnoses: Diagnosis[];
     patient: Patient;
 }
 
-const EntryForm = ({ patient }: FormProps) => {
+const EntryForm = ({ patient, diagnoses }: FormProps) => {
     const [entryType, setEntryType ] = useState('HealthCheck');
     const [description, setDescription] = useState('');
     const [date, setDate] = useState('');
     const [specialist, setSpecialist] = useState('');
-    const [diagnosisCode, setDiagnosisCode] = useState('');
+    //const [diagnosisCode, setDiagnosisCode] = useState('');
     const [diagnosisCodes, setDiagnosisCodes] = useState<string[]>([]);
     const [rating, setRating] = useState<string>('');
     const [employer, setEmployer] = useState<string>('');
@@ -21,6 +24,8 @@ const EntryForm = ({ patient }: FormProps) => {
     const [endDate, setEndDate] = useState<string>('');
     const [dischargeDate, setDischargeDate] = useState<string>('');
     const [criteria, setCriteria] = useState<string>('');
+
+    const ratings = ['0', '1', '2', '3'];
 
     const entryStyle = {
         border: "1px solid #ccc",
@@ -51,19 +56,21 @@ const EntryForm = ({ patient }: FormProps) => {
         setSpecialist(event.target.value);
     }
 
-    const handleDiagnoisCodeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        console.log("diagnosis code: ", diagnosisCode);
-        setDiagnosisCode(event.target.value);
-    }
+    // const handleDiagnoisCodeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    //     console.log("diagnosis code: ", diagnosisCode);
+    //     setDiagnosisCode(event.target.value);
+    // }
 
-    const addDiagnosisCode = (event: React.MouseEvent<HTMLButtonElement>) => {
+    const handleDiagnosisCodesChange = (event: SelectChangeEvent<typeof diagnosisCodes>) => {
         event.preventDefault();
         console.log("diagnosis codes:", diagnosisCodes);
-        setDiagnosisCodes(prevCodes => [...prevCodes, diagnosisCode]);
-        setDiagnosisCode('');
+        const {
+            target: { value },
+          } = event;
+        setDiagnosisCodes(typeof value === 'string' ? value.split(',') : value,);
     }
 
-    const handleRatingChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleRatingChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         console.log("rating: ", rating);
         setRating(event.target.value);
     }
@@ -111,7 +118,6 @@ const EntryForm = ({ patient }: FormProps) => {
                 setDescription('');
                 setDate('');
                 setSpecialist('');
-                setDiagnosisCode('');
                 setDiagnosisCodes([]);
                 setRating('');
                 break;
@@ -135,7 +141,6 @@ const EntryForm = ({ patient }: FormProps) => {
                 setDescription('');
                 setDate('');
                 setSpecialist('');
-                setDiagnosisCode('');
                 setDiagnosisCodes([]);
                 setDischargeDate('');
                 setCriteria('');
@@ -161,7 +166,6 @@ const EntryForm = ({ patient }: FormProps) => {
                 setDescription('');
                 setDate('');
                 setSpecialist('');
-                setDiagnosisCode('');
                 setDiagnosisCodes([]);
                 setDischargeDate('');
                 setCriteria('');
@@ -177,13 +181,34 @@ const EntryForm = ({ patient }: FormProps) => {
                         <form onSubmit={addEntry}>
                             Description: <input value={description} onChange={handleDescriptionChange}/>
                             <br/>
-                            Date: <input value={date} onChange={handleDateChange}/>
+                            Date: <input value={date} type='date' onChange={handleDateChange}/>
                             <br/>
                             Specialist: <input value={specialist} onChange={handleSpecialistChange}/>
                             <br/>
-                            Rating: <input value={rating} onChange={handleRatingChange}/>
+                            Rating: <select name="rating" id="rating" onChange={handleRatingChange}>
+                                        <option value="0">Healthy</option>
+                                        <option value="1">Low Risk</option>
+                                        <option value="2">High Risk</option>
+                                        <option value="3">Critical Risk</option>
+                                    </select>
                             <br/>
-                            Diagnosis Codes: <input value={diagnosisCode} onChange={handleDiagnoisCodeChange}/><button onClick={addDiagnosisCode}>add</button>
+                            Diagnosis Codes: <Select
+                                                labelId="diagnosisCodeHC"
+                                                id="diagnosisCodeHC"
+                                                multiple
+                                                value={diagnosisCodes}
+                                                onChange={handleDiagnosisCodesChange}
+                                                input={<OutlinedInput label="Name" />}
+                                                >
+                                                {diagnoses.map((name) => (
+                                                    <MenuItem
+                                                    key={name.code}
+                                                    value={name.code}
+                                                    >
+                                                    {name.code}
+                                                    </MenuItem>
+                                                ))}
+                                             </Select>
                             <ul>
                                 {diagnosisCodes.map(code => (
                                     <li key={code}>{code}</li>
@@ -199,15 +224,31 @@ const EntryForm = ({ patient }: FormProps) => {
                         <form onSubmit={addEntry}>
                             Description: <input value={description} onChange={handleDescriptionChange}/>
                             <br/>
-                            Date: <input value={date} onChange={handleDateChange}/>
+                            Date: <input value={date} type='date' onChange={handleDateChange}/>
                             <br/>
                             Specialist: <input value={specialist} onChange={handleSpecialistChange}/>
                             <br/>
-                            Discharge Date: <input value={dischargeDate} onChange={handleDischargeDateChange}/>
+                            Discharge Date: <input value={dischargeDate} type='date' onChange={handleDischargeDateChange}/>
                             <br/>
                             Discharge Criteria: <input value={criteria} onChange={handleCriteriaChange}/>
                             <br/>
-                            Diagnosis Codes: <input value={diagnosisCode} onChange={handleDiagnoisCodeChange}/><button onClick={addDiagnosisCode}>add</button>
+                            Diagnosis Codes: <Select
+                                                labelId="demo-multiple-name-label"
+                                                id="demo-multiple-name"
+                                                multiple
+                                                value={diagnosisCodes}
+                                                onChange={handleDiagnosisCodesChange}
+                                                input={<OutlinedInput label="Name" />}
+                                                >
+                                                {diagnoses.map((name) => (
+                                                    <MenuItem
+                                                    key={name.code}
+                                                    value={name.code}
+                                                    >
+                                                    {name.code}
+                                                    </MenuItem>
+                                                ))}
+                                             </Select>
                             <ul>
                                 {diagnosisCodes.map(code => (
                                     <li key={code}>{code}</li>
@@ -223,17 +264,33 @@ const EntryForm = ({ patient }: FormProps) => {
                         <form onSubmit={addEntry}>
                             Description: <input value={description} onChange={handleDescriptionChange}/>
                             <br/>
-                            Date: <input value={date} onChange={handleDateChange}/>
+                            Date: <input value={date} type='date' onChange={handleDateChange}/>
                             <br/>
                             Specialist: <input value={specialist} onChange={handleSpecialistChange}/>
                             <br/>
                             Employer Name: <input value={employer} onChange={handleEmployerChange}/>
                             <br/>
-                            Sick Leave Start: <input value={startDate} onChange={handleStartDateChange}/>
+                            Sick Leave Start: <input value={startDate} type='date' onChange={handleStartDateChange}/>
                             <br/>
-                            Sick Leave End: <input value={endDate} onChange={handleEndDateChange}/>
+                            Sick Leave End: <input value={endDate} type='date' onChange={handleEndDateChange}/>
                             <br/>
-                            Diagnosis Codes: <input value={diagnosisCode} onChange={handleDiagnoisCodeChange}/><button onClick={addDiagnosisCode}>add</button>
+                            Diagnosis Codes: <Select
+                                                labelId="demo-multiple-name-label"
+                                                id="demo-multiple-name"
+                                                multiple
+                                                value={diagnosisCodes}
+                                                onChange={handleDiagnosisCodesChange}
+                                                input={<OutlinedInput label="Name" />}
+                                                >
+                                                {diagnoses.map((name) => (
+                                                    <MenuItem
+                                                    key={name.code}
+                                                    value={name.code}
+                                                    >
+                                                    {name.code}
+                                                    </MenuItem>
+                                                ))}
+                                             </Select>
                             <ul>
                                 {diagnosisCodes.map(code => (
                                     <li key={code}>{code}</li>
