@@ -30,7 +30,7 @@ const HospitalEntrySchema = BaseEntrySchema.extend({
     discharge: z.object({
         date: z.string().date(),
         criteria: z.string(),
-    })
+    }).optional(),
 });
 
 const OccupationalHealthcareEntrySchema = BaseEntrySchema.extend({

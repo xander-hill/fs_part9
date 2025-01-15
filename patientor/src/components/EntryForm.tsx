@@ -9,7 +9,7 @@ interface FormProps {
 }
 
 const EntryForm = ({ patient }: FormProps) => {
-    const [entryType, setEntryType ] = useState('');
+    const [entryType, setEntryType ] = useState('HealthCheck');
     const [description, setDescription] = useState('');
     const [date, setDate] = useState('');
     const [specialist, setSpecialist] = useState('');
@@ -21,6 +21,14 @@ const EntryForm = ({ patient }: FormProps) => {
     const [endDate, setEndDate] = useState<string>('');
     const [dischargeDate, setDischargeDate] = useState<string>('');
     const [criteria, setCriteria] = useState<string>('');
+
+    const entryStyle = {
+        border: "1px solid #ccc",
+        borderRadius: "8px",
+        padding: "15px",
+        marginBottom: "10px",
+        backgroundColor: "#f9f9f9"
+    };
 
 
     const handleEntryType = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -90,7 +98,7 @@ const EntryForm = ({ patient }: FormProps) => {
         switch (entryType) {
             case "HealthCheck":
                 event?.preventDefault()
-                const newEntry = {
+                const newHealthCheckEntry = {
                     type: "HealthCheck",
                     description: description,
                     date: date,
@@ -98,7 +106,7 @@ const EntryForm = ({ patient }: FormProps) => {
                     diagnosisCodes: diagnosisCodes,
                     healthCheckRating: Number(rating)
                 } as EntryWithoutId;
-                await patientService.update(patient.id, newEntry);
+                await patientService.update(patient.id, newHealthCheckEntry);
                 window.location.reload();
                 setDescription('');
                 setDate('');
@@ -106,6 +114,58 @@ const EntryForm = ({ patient }: FormProps) => {
                 setDiagnosisCode('');
                 setDiagnosisCodes([]);
                 setRating('');
+                break;
+            case "Hospital":
+                event?.preventDefault()
+                const newHospitalEntry = {
+                    type: "Hospital",
+                    description: description,
+                    date: date,
+                    specialist: specialist,
+                    diagnosisCodes: diagnosisCodes,
+                    discharge: date !== '' && criteria !== ''
+                        ? {
+                            date: dischargeDate,
+                            criteria: criteria
+                        }
+                        : undefined
+                } as EntryWithoutId;
+                await patientService.update(patient.id, newHospitalEntry);
+                window.location.reload();
+                setDescription('');
+                setDate('');
+                setSpecialist('');
+                setDiagnosisCode('');
+                setDiagnosisCodes([]);
+                setDischargeDate('');
+                setCriteria('');
+                break;
+            case "OccupationalHealthcare":
+                event?.preventDefault()
+                const occupationalEntry = {
+                    type: "OccupationalHealthcare",
+                    description: description,
+                    date: date,
+                    specialist: specialist,
+                    diagnosisCodes: diagnosisCodes,
+                    employerName: employer,
+                    sickLeave: startDate !== '' && endDate !== ''
+                        ? {
+                            startDate: startDate,
+                            endDate: endDate
+                        }
+                        : undefined
+                } as EntryWithoutId;
+                await patientService.update(patient.id, occupationalEntry);
+                window.location.reload();
+                setDescription('');
+                setDate('');
+                setSpecialist('');
+                setDiagnosisCode('');
+                setDiagnosisCodes([]);
+                setDischargeDate('');
+                setCriteria('');
+                break;
         }
     }
 
@@ -133,11 +193,62 @@ const EntryForm = ({ patient }: FormProps) => {
                         </form>
                     </div>
                 )
+            case "Hospital":
+                return (
+                    <div>
+                        <form onSubmit={addEntry}>
+                            Description: <input value={description} onChange={handleDescriptionChange}/>
+                            <br/>
+                            Date: <input value={date} onChange={handleDateChange}/>
+                            <br/>
+                            Specialist: <input value={specialist} onChange={handleSpecialistChange}/>
+                            <br/>
+                            Discharge Date: <input value={dischargeDate} onChange={handleDischargeDateChange}/>
+                            <br/>
+                            Discharge Criteria: <input value={criteria} onChange={handleCriteriaChange}/>
+                            <br/>
+                            Diagnosis Codes: <input value={diagnosisCode} onChange={handleDiagnoisCodeChange}/><button onClick={addDiagnosisCode}>add</button>
+                            <ul>
+                                {diagnosisCodes.map(code => (
+                                    <li key={code}>{code}</li>
+                                ))}
+                            </ul>
+                            <button type='submit'>add entry</button>
+                        </form>
+                    </div>
+                )
+            case "OccupationalHealthcare":
+                return (
+                    <div>
+                        <form onSubmit={addEntry}>
+                            Description: <input value={description} onChange={handleDescriptionChange}/>
+                            <br/>
+                            Date: <input value={date} onChange={handleDateChange}/>
+                            <br/>
+                            Specialist: <input value={specialist} onChange={handleSpecialistChange}/>
+                            <br/>
+                            Employer Name: <input value={employer} onChange={handleEmployerChange}/>
+                            <br/>
+                            Sick Leave Start: <input value={startDate} onChange={handleStartDateChange}/>
+                            <br/>
+                            Sick Leave End: <input value={endDate} onChange={handleEndDateChange}/>
+                            <br/>
+                            Diagnosis Codes: <input value={diagnosisCode} onChange={handleDiagnoisCodeChange}/><button onClick={addDiagnosisCode}>add</button>
+                            <ul>
+                                {diagnosisCodes.map(code => (
+                                    <li key={code}>{code}</li>
+                                ))}
+                            </ul>
+                            <button type='submit'>add entry</button>
+                        </form>
+                    </div>
+                )
         }
     }
 
     return (
-        <div>
+        <div style={entryStyle}>
+            <h3>Add Entry: </h3>
             <label htmlFor="entry">Choose entry type:</label>
             <select name="entry" id="entry" onChange={handleEntryType}>
                 <option value="HealthCheck">Health Check</option>

@@ -10,6 +10,14 @@ interface Props {
 
 const SingleEntry = ({ entry, diagnoses }: Props) => {
 
+    const entryStyle = {
+        border: "1px solid #ccc",
+        borderRadius: "8px",
+        padding: "15px",
+        marginBottom: "10px",
+        backgroundColor: "#f9f9f9"
+    };
+
     const assertNever = (value: never): never => {
         throw new Error(
           `Unhandled discriminated union member: ${JSON.stringify(value)}`
@@ -21,7 +29,7 @@ const SingleEntry = ({ entry, diagnoses }: Props) => {
     switch (entry.type) {
         case "Hospital":
             return (
-                <div>
+                <div style={entryStyle}>
                     {entry.date} <LocalHospitalIcon/>
                     <br />
                     {entry.description}
@@ -40,12 +48,12 @@ const SingleEntry = ({ entry, diagnoses }: Props) => {
             );
         case "HealthCheck":
             return (
-                <div>
+                <div style={entryStyle}>
                     {entry.date} <VaccinesIcon/>
                     <br />
                     {entry.description}
                     <br />
-                    {entry.healthCheckRating}
+                    Health Rating: {entry.healthCheckRating}
                     <ul>
                         {entry.diagnosisCodes?.map(code => (
                             <li key={code}>{code}: {diagnosisCode(code)}</li>
@@ -56,7 +64,7 @@ const SingleEntry = ({ entry, diagnoses }: Props) => {
             );
         case "OccupationalHealthcare":
             return (
-                <div>
+                <div style={entryStyle}>
                     {entry.date} <BusinessCenterIcon/>
                     <br />
                     {entry.description}

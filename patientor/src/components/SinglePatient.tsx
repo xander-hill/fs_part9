@@ -4,7 +4,6 @@ import FemaleIcon from '@mui/icons-material/Female';
 import TransgenderIcon from '@mui/icons-material/Transgender';
 import SingleEntry from "./SingleEntry";
 import EntryForm from "./EntryForm";
-import { useEffect, useState } from "react";
 
 interface Props {
     patient: Patient | undefined | null;
@@ -13,8 +12,6 @@ interface Props {
 
 
 const SinglePatient = ({ patient, diagnoses } : Props) => {
-    const [patientState, setPatientState] = useState<Patient | null | undefined>(patient);
-
     
     if (!patient) {
         return null;
